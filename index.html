@@ -1,38 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Mi Malla Interactiva</title>
+  <meta charset="UTF-8" />
+  <title>Malla Curricular Interactiva - Psicología</title>
   <style>
-    body { font-family: sans-serif; }
-    .cuadro {
-      width: 100px;
-      height: 100px;
-      border: 2px solid #333;
-      display: inline-block;
-      margin: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
+    body {
+      background-color: #fff9c4; /* Amarillo pastel */
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
     }
-    .cuadro.activo {
-      background-color: lightgreen;
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      margin-top: 40px;
+      color: #333;
+    }
+
+    .modulo {
+      margin-bottom: 30px;
+    }
+
+    .materias {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .materia {
+      border: 2px solid #333;
+      border-radius: 8px;
+      padding: 10px;
+      width: 220px;
+      text-align: center;
+      font-size: 14px;
+      cursor: default;
+      background-color: #d6a3ff; /* Lila - bloqueada */
+      transition: all 0.3s ease;
+    }
+
+    .materia.activa {
+      background-color: #ffcce5; /* Rosa bebé */
+      cursor: pointer;
+    }
+
+    .materia.completada {
+      background-color: #a3dfff; /* Celeste */
+      color: #000;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>Malla Interactiva</h1>
-  <div id="malla">
-    <!-- Malla generada por JS -->
-  </div>
+  <h1>Malla Curricular Interactiva - Psicología</h1>
+
+  <div id="contenedor"></div>
 
   <script>
-    const contenedor = document.getElementById('malla');
-    for (let i = 0; i < 20; i++) {
-      const div = document.createElement('div');
-      div.className = 'cuadro';
-      div.onclick = () => div.classList.toggle('activo');
-      contenedor.appendChild(div);
+    const materias = [
+      // === CBC ===
+      { id: 1, nombre: "Pensamiento Científico", modulo: "CBC", requisitos: [] },
+      { id: 2, nombre: "Sociedad Y Estado", modulo: "CBC", requisitos: [] },
+      { id: 3, nombre: "Biología", modulo: "CBC", requisitos: [] },
+      { id: 4, nombre: "Psicología", modulo: "CBC", requisitos: [] },
+      { id: 5, nombre: "Semiología", modulo: "CBC", requisitos: [] },
+      { id: 6, nombre: "Matemáticas", modulo: "CBC", requisitos: [] },
+
+      // === CFG ===
+      { id: 7, nombre: "Psicología General", modulo: "CFG", requisitos: [1, 2, 3, 4, 5, 6] },
+      { id: 8, nombre: "Estadística", modulo: "CFG", requisitos: [1, 2, 3, 4, 5, 6] },
+      { id: 9, nombre: "Psicología Social", modulo: "CFG", requisitos: [1, 2, 3, 4, 5, 6] },
+      { id: 10, nombre: "Psicoanálisis Freud", modulo: "CFG", requisitos: [1, 2, 3, 4, 5, 6] },
+      { id: 11, nombre: "Psicología y Epistemología Genética", modulo: "CFG", requisitos: [1, 2, 3, 4, 5, 6] },
+      { id: 12, nombre: "Neurofisiología", modulo: "CFG", requisitos: [1, 2, 3, 4, 5, 6] },
+      { id: 13, nombre: "Requisito de Idioma 1", modulo: "CFG", requisitos: [7, 10] },
+      { id: 14, nombre: "Requisito de Idioma 2", modulo: "CFG", requisitos: [7, 10, 13] },
+      { id: 15, nombre: "Historia de la Psicología", modulo: "CFG", requisitos: [7] },
+      { id: 16, nombre: "Metodología de la Investigación", modulo: "CFG", requisitos: [7, 8] },
+      { id: 17, nombre: "Salud Pública y Salud Mental", modulo: "CFG", requisitos: [7, 8, 9, 16] },
+      { id: 18, nombre: "Teoría y Técnicas de Grupos", modulo: "CFG", requisitos: [9, 10] },
+      { id: 19, nombre: "Psicología Evolutiva Niñez", modulo: "CFG", requisitos: [10, 11] },
+      { id: 20, nombre: "Psicología Evolutiva Adolescencia", modulo: "CFG", requisitos: [10, 11] },
+      { id: 21, nombre: "Psicopatología", modulo: "CFG", requisitos: [10, 11, 12, 19, 20] },
+      { id: 22, nombre: "Exploración y Diagnóstico I", modulo: "CFG", requisitos: [11, 12, 10, 7, 19, 20, 8, 21, 16] },
+      { id: 23, nombre: "Exploración y Diagnóstico II", modulo: "CFG", requisitos: [11, 12, 10, 7, 19, 20, 8, 21, 16] },
+      { id: 24, nombre: "Materia Electiva 1 CFG", modulo: "CFG", requisitos: [] },
+      { id: 25, nombre: "Materia Electiva 2 CFG", modulo: "CFG", requisitos: [] },
+
+      // === CFP ===
+      { id: 26, nombre: "Clínica Adultos", modulo: "CFP", requisitos: [17, 7, 8, 9, 10, 16, 18] },
+      { id: 27, nombre: "Psicoterapias y Emergencias", modulo: "CFP", requisitos: [8, 7, 16, 12, 22, 11, 21, 10, 23, 20, 19] },
+      { id: 28, nombre: "Psicología del Trabajo", modulo: "CFP", requisitos: [16, 22, 23, 8, 7, 12, 21, 11, 19, 20, 10, 18, 9] },
+      { id: 29, nombre: "Psicología Educacional", modulo: "CFP", requisitos: [8, 17, 7, 16, 19, 20, 11, 10, 9, 18] },
+      { id: 30, nombre: "Ética y Derechos Humanos", modulo: "CFP", requisitos: [9, 15, 7] },
+      { id: 31, nombre: "Psicología Institucional", modulo: "CFP", requisitos: [17, 10, 7, 8, 16, 9, 18] },
+      { id: 32, nombre: "Psicología Jurídica", modulo: "CFP", requisitos: [11, 8, 10, 22, 7, 19, 16, 20, 12, 21, 23] },
+      { id: 33, nombre: "Materia Electiva 1 CFP", modulo: "CFP", requisitos: [] },
+      { id: 34, nombre: "Materia Electiva 2 CFP", modulo: "CFP", requisitos: [] },
+      { id: 35, nombre: "Materia Electiva 3 CFP", modulo: "CFP", requisitos: [] },
+      { id: 36, nombre: "Práctica Profesional", modulo: "CFP", requisitos: [17] },
+      { id: 37, nombre: "Tesis de Licenciatura", modulo: "CFP", requisitos: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36] }
+    ];
+
+    const completadas = new Set();
+
+    const contenedor = document.getElementById("contenedor");
+
+    const modulos = [...new Set(materias.map(m => m.modulo))];
+
+    modulos.forEach(modulo => {
+      const divModulo = document.createElement("div");
+      divModulo.className = "modulo";
+
+      const titulo = document.createElement("h2");
+      titulo.textContent = modulo;
+      divModulo.appendChild(titulo);
+
+      const contenedorMaterias = document.createElement("div");
+      contenedorMaterias.className = "materias";
+
+      materias
+        .filter(m => m.modulo === modulo)
+        .forEach(materia => {
+          const div = document.createElement("div");
+          div.className = "materia";
+          div.textContent = materia.nombre;
+          div.dataset.id = materia.id;
+          contenedorMaterias.appendChild(div);
+        });
+
+      divModulo.appendChild(contenedorMaterias);
+      contenedor.appendChild(divModulo);
+    });
+
+    function actualizarEstado() {
+      document.querySelectorAll(".materia").forEach(div => {
+        const id = parseInt(div.dataset.id);
+        const materia = materias.find(m => m.id === id);
+
+        if (completadas.has(id)) {
+          div.classList.add("completada");
+          div.classList.remove("activa");
+          return;
+        }
+
+        const puedeActivarse = materia.requisitos.every(req => completadas.has(req));
+
+        if (puedeActivarse) {
+          div.classList.add("activa");
+        } else {
+          div.classList.remove("activa");
+        }
+      });
     }
+
+    document.addEventListener("click", e => {
+      if (e.target.classList.contains("materia") && e.target.classList.contains("activa")) {
+        const id = parseInt(e.target.dataset.id);
+        completadas.add(id);
+        actualizarEstado();
+      }
+    });
+
+    actualizarEstado();
   </script>
 </body>
 </html>
