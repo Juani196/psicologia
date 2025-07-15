@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Malla Curricular Interactiva - Psicología</title>
+  <title>Malla Curricular de Psicología</title>
   <style>
     body {
-      background-color: #fff9c4; /* Amarillo pastel */
+      background-color: #ffe4e1; /* Rosa pastel */
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 20px;
@@ -13,58 +13,67 @@
 
     h1 {
       text-align: center;
-      margin-bottom: 30px;
-    }
-
-    h2 {
-      margin-top: 40px;
       color: #333;
     }
 
     .modulo {
-      margin-bottom: 30px;
+      border: 2px solid #ccc;
+      border-radius: 15px;
+      margin: 30px auto;
+      padding: 20px;
+      max-width: 900px;
+      background: white;
+    }
+
+    .modulo h2 {
+      text-align: center;
+      margin-bottom: 20px;
     }
 
     .materias {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
+      justify-content: center;
     }
 
     .materia {
-      border: 2px solid #333;
-      border-radius: 8px;
-      padding: 10px;
-      width: 220px;
+      width: 180px;
+      padding: 12px;
+      border-radius: 10px;
       text-align: center;
       font-size: 14px;
-      cursor: default;
-      background-color: #d6a3ff; /* Lila - bloqueada */
-      transition: all 0.3s ease;
+      cursor: not-allowed;
+      background-color: #d8b4e2; /* Lila (bloqueado) */
+      transition: background 0.3s, transform 0.2s;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
     }
 
     .materia.activa {
-      background-color: #ffcce5; /* Rosa bebé */
+      background-color: #fff9c4; /* Amarillo pastel */
       cursor: pointer;
     }
 
     .materia.completada {
-      background-color: #a3dfff; /* Celeste */
-      color: #000;
-      font-weight: bold;
+      background-color: #b2ebf2; /* Celeste pastel */
+      cursor: default;
+    }
+
+    .materia:hover.activa {
+      transform: scale(1.03);
     }
   </style>
 </head>
 <body>
-  <h1>Malla Curricular Interactiva - Psicología</h1>
+  <h1>Malla Curricular de Psicología (Interactiva)</h1>
 
   <div id="contenedor"></div>
 
   <script>
     const materias = [
-      // === CBC ===
-      { id: 1, nombre: "Pensamiento Científico", modulo: "CBC", requisitos: [] },
-      { id: 2, nombre: "Sociedad Y Estado", modulo: "CBC", requisitos: [] },
+      // CBC
+      { id: 1, nombre: "Pensamiento Científico", grupo: "CBC", requisitos: [] },
+      { id: 2, nombre: "Sociedad y Estado", grupo: "CBC", requisitos: [] },
       { id: 3, nombre: "Biología", modulo: "CBC", requisitos: [] },
       { id: 4, nombre: "Psicología", modulo: "CBC", requisitos: [] },
       { id: 5, nombre: "Semiología", modulo: "CBC", requisitos: [] },
